@@ -1,17 +1,19 @@
 # istatboard-server
-Istat board REST Server side 
+Istat board REST API server 
  
-Table of Contents
+## Table of Contents
 
-    Installation
-    Usage
-    What's included
-    Documentation
-    License
+* [Installation](#installation)
+* [Usage](#usage)
+* [What's included](#whats-included)
+* [Documentation](#documentation)
+* [License](#license)
 
-Installation
-Clone repo
 
+## Installation
+### Clone repo
+
+``` bash
 # clone the repo
 $ git clone https://github.com/mecdcme/istatboard-server.git istatboard-server
 
@@ -20,23 +22,18 @@ $ cd istatboard-server
 
 # install app's dependencies
 $ npm install
+```
 
-Usage
+## Usage
 
+``` bash
 # serve with hot reload at localhost:8080.
 $ node server.js
+```
 
- 
-
-What's included
-
-Within the download you'll find the following directories and files, logically grouping common assets and providing both compiled and minified variations. You'll see something like this:
-
-...
-
-Creators
+## Creators
 
 **Mec Team **
-License
 
-Istatboard is EUPL-licensed
+## License
+Istatboard-server is EUPL-licensed
