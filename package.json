@@ -1,0 +1,30 @@
+{
+  "name": "istatboard-server",
+  "version": "1.0.0",
+  "description": "Istat board API REST Server",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mecdcme/istatboard-server.git"
+  },
+  "author": "Mec-Team",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mecdcme/istatboard-server/issues"
+  },
+  "homepage": "https://github.com/mecdcme/istatboard-server#readme",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "cors": "^2.8.5",
+    "express": "^4.16.4",
+    "mysql": "^2.16.0",
+    "mysql2": "^1.6.4",
+    "sequelize": "^4.42.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.9"
+  }
+}
