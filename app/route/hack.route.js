@@ -1,6 +1,7 @@
 module.exports = function(app) {
  
    const db = require('../config/db.config.js');
+   const User = require('../models/user.model.js');
    const iLogDiary = db.ilogdiary;
   
     // Retrieve all ilogdiaries
@@ -15,7 +16,7 @@ module.exports = function(app) {
     // Retrieve a single ilogdiaries by Id
     app.get('/api/ilogdiary/:ilogdiaryId',
      function (req, res) {	
-        iLogDiary.findById(req.params.ilogdiaryId).then(ilogdiary => {
+        iLogDiary.findByPk(req.params.ilogdiaryId ).then(ilogdiary => {
             res.json(ilogdiary);
         });
     });

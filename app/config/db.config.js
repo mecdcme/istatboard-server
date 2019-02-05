@@ -24,6 +24,14 @@ db.sequelize = sequelize;
 
 //Models/tables
 
-db.ilogdiary = require('../model/ilogdiary.model.js')(sequelize, Sequelize);
-
+db.ilogdiary = require('../models/ilogdiary.model.js')(sequelize, Sequelize);
+db.activity = require('../models/activity.model.js')(sequelize, Sequelize);
+db.mood = require('../models/mood.model.js')(sequelize, Sequelize);
+db.person = require('../models/person.model.js')(sequelize, Sequelize);
+db.place = require('../models/place.model.js')(sequelize, Sequelize);
+db.user = require('../models/user.model.js')(sequelize, Sequelize);
+ 
+//db.activity.belongsTo(db.ilogdiary);
+//db.activity.belongsTo(db.ilogdiary);
+ 
 module.exports = db;
