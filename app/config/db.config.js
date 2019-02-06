@@ -33,7 +33,8 @@ db.user = require('../models/user.model.js')(sequelize, Sequelize);
 db.v_user_week = require('../models/v_user_week.model.js')(sequelize, Sequelize);
 db.ilogdiary = require('../models/ilogdiary.model.js')(sequelize, Sequelize);
 
-db.ilogdiary .belongsTo(db.user, {foreignKey: 'id', targetKey: 'id'});
+db.ilogdiary .hasOne(db.user, {foreignKey :'id', targetKey: 'user'});
+//db.ilogdiary .belongsTo(db.user, {as :'user', targetKey: 'id'});
 //	ILogDiary.hasOne(User, {as: 'user', foreignKey: 'id'});
 //db.activity.belongsTo(db.ilogdiary);
 //db.activity.belongsTo(db.ilogdiary);
