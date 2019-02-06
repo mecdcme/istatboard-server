@@ -30,6 +30,8 @@ db.mood = require('../models/mood.model.js')(sequelize, Sequelize);
 db.person = require('../models/person.model.js')(sequelize, Sequelize);
 db.place = require('../models/place.model.js')(sequelize, Sequelize);
 db.user = require('../models/user.model.js')(sequelize, Sequelize);
+db.v_user_week = require('../models/v_user_week.model.js')(sequelize, Sequelize);
+
  
 //db.activity.belongsTo(db.ilogdiary);
 //db.activity.belongsTo(db.ilogdiary);

@@ -1,4 +1,4 @@
-const ILogDiary = require('../models/ilogdiary.model.js');
+
 module.exports = (sequelize, Sequelize) => {
 	const User = sequelize.define('user', {
 	  id: {
@@ -12,7 +12,7 @@ module.exports = (sequelize, Sequelize) => {
 	}, {
 		tableName: 'cls_users'
  });
- //User.belongsTo(ILogDiary,{foreignKey: 'user'});
+
 	return User;
 }
  

@@ -1,8 +1,8 @@
 module.exports = function(app) {
  
    const db = require('../config/db.config.js');
-   const User = require('../models/user.model.js');
    const iLogDiary = db.ilogdiary;
+   const vUserWeek = db.v_user_week; 
   
     // Retrieve all ilogdiaries
     app.get('/api/ilogdiary',
@@ -21,5 +21,14 @@ module.exports = function(app) {
         });
     });
  
+      
+    // Retrieve all ilogdiaries
+    app.get('/api/report/userweek',
+    function (req, res)  {
+        vUserWeek.findAll().then(vUserWeeks => {
+          // Send all customers to Client
+          res.json(vUserWeeks);
+        });
+    });
    
 }
