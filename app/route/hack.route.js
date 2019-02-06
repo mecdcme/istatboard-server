@@ -1,13 +1,19 @@
 module.exports = function(app) {
  
    const db = require('../config/db.config.js');
-   const iLogDiary = db.ilogdiary;
+   const ilogdiary = db.ilogdiary;
+   const user = db.user;
    const vUserWeek = db.v_user_week; 
   
     // Retrieve all ilogdiaries
     app.get('/api/ilogdiary',
     function (req, res)  {
-        iLogDiary.findAll().then(ilogdiaries => {
+        ilogdiary.findAll({
+            include:[{
+              model:user
+            }],
+            'limit':10
+        }).then(ilogdiaries => {
           // Send all customers to Client
           res.json(ilogdiaries);
         });
@@ -16,7 +22,7 @@ module.exports = function(app) {
     // Retrieve a single ilogdiaries by Id
     app.get('/api/ilogdiary/:ilogdiaryId',
      function (req, res) {	
-        iLogDiary.findByPk(req.params.ilogdiaryId ).then(ilogdiary => {
+        ilogdiary.findByPk(req.params.ilogdiaryId ).then(ilogdiary => {
             res.json(ilogdiary);
         });
     });

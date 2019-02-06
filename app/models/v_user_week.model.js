@@ -14,9 +14,7 @@ module.exports = (sequelize, Sequelize) => {
 	}
 	);
 
-//	ILogDiary.hasOne(User, {as: 'user', foreignKey: 'id'});
-	//ILogDiary.belongsTo(User,{foreignKey: 'id'});
-	//ILogDiary.hasOne(User,{foreignKey: 'user'});
+
 	VUserWeek.removeAttribute('id');
 	return VUserWeek;
 }
