@@ -29,6 +29,8 @@ $ npm install
 ``` bash
 # serve with hot reload at localhost:8080.
 $ node server.js
+# you can also execute the following command
+$ npm start
 ```
 
 ## Creators
