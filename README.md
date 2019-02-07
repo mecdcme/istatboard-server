@@ -31,6 +31,9 @@ $ npm install
 $ node server.js
 # you can also execute the following command
 $ npm start
+
+# you can also execute the following command to have hot deploy
+$ nodemon server.js
 ```
 
 ## Creators

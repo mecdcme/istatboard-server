@@ -4,6 +4,7 @@ module.exports = function(app) {
    const ilogdiary = db.ilogdiary;
    const user = db.user;
    const vUserWeek = db.v_user_week; 
+   const vUserWeekJoin = db.v_user_week_join; 
   
     // Retrieve all ilogdiaries
     app.get('/api/ilogdiary',
@@ -37,4 +38,13 @@ module.exports = function(app) {
         });
     });
    
+     // Retrieve all ilogdiaries
+     app.get('/api/report/userweekjoin',
+     function (req, res)  {
+        vUserWeekJoin.findAll().then(vUserWeekJoins => {
+           // Send all customers to Client
+           res.json(vUserWeekJoins);
+         });
+     });
+    
 }
