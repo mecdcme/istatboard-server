@@ -30,11 +30,12 @@ db.mood = require('../models/mood.model.js')(sequelize, Sequelize);
 db.person = require('../models/person.model.js')(sequelize, Sequelize);
 db.place = require('../models/place.model.js')(sequelize, Sequelize);
 db.user = require('../models/user.model.js')(sequelize, Sequelize);
+db.timereport = require('../models/timereport.model.js')(sequelize, Sequelize);
 db.v_user_week = require('../models/v_user_week.model.js')(sequelize, Sequelize);
 db.v_user_week_join = require('../models/v_user_week_join.model.js')(sequelize, Sequelize);
 db.ilogdiary = require('../models/ilogdiary.model.js')(sequelize, Sequelize);
 
-db.ilogdiary .hasOne(db.user, {foreignKey :'id', targetKey: 'user'});
+db.ilogdiary.hasOne(db.user, {foreignKey :'id', targetKey: 'user'});
 //db.ilogdiary .belongsTo(db.user, {as :'user', targetKey: 'id'});
 //	ILogDiary.hasOne(User, {as: 'user', foreignKey: 'id'});
 //db.activity.belongsTo(db.ilogdiary);

@@ -1,4 +1,4 @@
-const user = require('../models/user.model.js');
+ 
 module.exports = (sequelize, Sequelize) => {
 	const ilogdiary = sequelize.define('ilogdiary', {
 		id: {
@@ -18,8 +18,7 @@ module.exports = (sequelize, Sequelize) => {
 		 
 	}
 	);
-
-
+ 
 //	ILogDiary.hasOne(User, {as: 'user', foreignKey: 'id'});
 	//ILogDiary.belongsTo(User,{foreignKey: 'id'});
 	//ILogDiary.hasOne(User,{foreignKey: 'user'});
