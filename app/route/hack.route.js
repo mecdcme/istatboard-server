@@ -56,4 +56,13 @@ module.exports = function(app) {
             });
         });
        
+         // Retrieve all ilogdiaries
+         app.get('/api/report/file',
+         function (req, res)  {
+          db.sequelize.query('SELECT * FROM hack.filestorefast2', { type: db.sequelize.QueryTypes.SELECT})
+          .then(function(rows){
+            res.json(rows);
+        });
+    
+         });
 }
