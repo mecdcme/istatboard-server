@@ -3,6 +3,7 @@ const env = require('./env.js');
 const Sequelize = require('sequelize');
 const sequelize = new Sequelize(env.database, env.username, env.password, {
   host: env.host,
+  port: env.port,
   dialect: env.dialect,
   operatorsAliases: false,
   define: {
@@ -34,6 +35,7 @@ db.timereport = require('../models/timereport.model.js')(sequelize, Sequelize);
 db.v_user_week = require('../models/v_user_week.model.js')(sequelize, Sequelize);
 db.v_user_week_join = require('../models/v_user_week_join.model.js')(sequelize, Sequelize);
 db.ilogdiary = require('../models/ilogdiary.model.js')(sequelize, Sequelize);
+db.EuMainActivityRate = require('../models/eu_main_activity_rate.model.js')(sequelize, Sequelize);
 
 db.ilogdiary.hasOne(db.user, {foreignKey :'id', targetKey: 'user'});
 //db.ilogdiary .belongsTo(db.user, {as :'user', targetKey: 'id'});
