@@ -58,18 +58,25 @@ module.exports = function (app) {
     });
 
   // Retrieve all ilogdiaries
-  app.get('/api/report/file',
+  app.get('/api/report/:name',
     function (req, res) {
-      db.sequelize.query('SELECT * FROM hack.filestorefast2', { type: db.sequelize.QueryTypes.SELECT })
+      db.sequelize.query('SELECT * FROM ' + req.params.name, { type: db.sequelize.QueryTypes.SELECT })
         .then(function (rows) {
           res.json(rows);
         });
     });
   
   // Retrieve all eu_activities
-  app.get('/api/report/eumainactivityrate',
+  app.get('/api/report/eumainactivityrate/:country/:sex/:activity',
     function (req, res) {
-      euMainActivityRate.findAll().then(euMainActivityRate => {
+      euMainActivityRate.findAll({
+        attributes: ['start_time', 'value'],
+        where: {
+          country: req.params.country,
+          sex: req.params.sex,
+          activity: req.params.activity
+        }
+      }).then(euMainActivityRate => {
         // Send all activities to Client
         res.json(euMainActivityRate);
       });
