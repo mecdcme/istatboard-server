@@ -49,23 +49,47 @@ module.exports = function (app) {
       });
     });
   // Retrieve all ilogdiaries
-  app.get('/api/report/time',
+  app.get('/api/report/list/:source',
     function (req, res) {
-      timereport.findAll().then(timereports => {
-        // Send all customers to Client
-        res.json(timereports);
-      });
+      db.sequelize.query('SELECT * FROM reports r where r.source=:source', { replacements: { source: req.params.source }, type: db.sequelize.QueryTypes.SELECT })
+        .then(function (rows) {
+          res.json(rows);
+        });
     });
 
+
   // Retrieve all ilogdiaries
-  app.get('/api/report/:name',
+  app.get('/api/reporta/:name',
     function (req, res) {
       db.sequelize.query('SELECT * FROM ' + req.params.name, { type: db.sequelize.QueryTypes.SELECT })
         .then(function (rows) {
           res.json(rows);
         });
     });
-  
+
+
+  // Retrieve all ilogdiaries
+  app.get('/api/report/:reportId',
+    function (req, res) {
+
+      db.sequelize.query(' select dbquery FROM hack.reports  where id= ' + req.params.reportId,
+        { type: db.sequelize.QueryTypes.SELECT }).then(function (rows) {
+          console.log(rows[0].dbquery);
+          getReportData(res, rows[0].dbquery);
+        });
+    });
+
+  function getReportData(res, dbquery) {
+
+    db.sequelize.query(' select * FROM hack.' + dbquery,
+      { type: db.sequelize.QueryTypes.SELECT }).then(function (rows) {
+        res.json(rows);
+
+      });
+
+  }
+
+
   // Retrieve all eu_activities
   app.get('/api/report/eumainactivityrate/:country/:sex/:activity',
     function (req, res) {

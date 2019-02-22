@@ -332,5 +332,5 @@ from hack.eu_main_activity_rate
 group by hour;
 END//
 
--- call proc_eu_sex_time_hour('Romania', 'Eating'); 
+ call proc_eu_sex_time_hour('Romania', 'Eating'); 
 
