@@ -71,8 +71,7 @@ module.exports = function (app) {
   // Retrieve all ilogdiaries
   app.get('/api/report/:reportId',
     function (req, res) {
-
-      db.sequelize.query(' select dbquery FROM hack.reports  where id= ' + req.params.reportId,
+     db.sequelize.query(' select dbquery FROM hack.reports  where id= ' + req.params.reportId,
         { type: db.sequelize.QueryTypes.SELECT }).then(function (rows) {
           console.log(rows[0].dbquery);
           getReportData(res, rows[0].dbquery);
@@ -80,7 +79,6 @@ module.exports = function (app) {
     });
 
   function getReportData(res, dbquery) {
-
     db.sequelize.query(' select * FROM hack.' + dbquery,
       { type: db.sequelize.QueryTypes.SELECT }).then(function (rows) {
         res.json(rows);
@@ -89,6 +87,16 @@ module.exports = function (app) {
 
   }
 
+  // CALL a Procedure MYSQL
+ 
+  app.get('/api/proc/report',
+    function (req, res) {
+      db.sequelize.query(' call proc_eu_sex_time_hour(\'Romania\', \'Eating\');' )
+        .then(function (rows) {
+          res.json(rows);
+        });
+    });
+   
 
   // Retrieve all eu_activities
   app.get('/api/report/eumainactivityrate/:country/:sex/:activity',
