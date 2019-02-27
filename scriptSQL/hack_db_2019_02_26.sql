@@ -1,3 +1,5 @@
+create schema `hack`;
+use `hack`;
 -- MySQL dump 10.13  Distrib 8.0.14, for Win64 (x86_64)
 --
 -- Host: localhost    Database: hack
