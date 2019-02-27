@@ -51,21 +51,13 @@ module.exports = function (app) {
   // Retrieve all ilogdiaries
   app.get('/api/report/list/:source',
     function (req, res) {
-      db.sequelize.query('SELECT * FROM reports r where r.source=:source', { replacements: { source: req.params.source }, type: db.sequelize.QueryTypes.SELECT })
+      db.sequelize.query('SELECT * FROM reports r where r.source=:source', { replacements: { source: req.params.source }, type: db.sequelize.QueryTypes.SELECT,hierarchy: true })
         .then(function (rows) {
           res.json(rows);
         });
     });
 
-
-  // Retrieve all ilogdiaries
-  app.get('/api/reporta/:name',
-    function (req, res) {
-      db.sequelize.query('SELECT * FROM ' + req.params.name, { type: db.sequelize.QueryTypes.SELECT })
-        .then(function (rows) {
-          res.json(rows);
-        });
-    });
+ 
 
 
   // Retrieve all ilogdiaries
@@ -113,4 +105,13 @@ module.exports = function (app) {
         res.json(euMainActivityRate);
       });
     });
+
+      // Retrieve all cls values
+  app.get('/api/cls/values/:cls',
+  function (req, res) {
+    db.sequelize.query('SELECT description FROM hack.'+ req.params.cls, { type: db.sequelize.QueryTypes.SELECT })
+      .then(function (rows) {
+        res.json(rows);
+      });
+  });
 }
