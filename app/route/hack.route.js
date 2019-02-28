@@ -51,19 +51,19 @@ module.exports = function (app) {
   // Retrieve all ilogdiaries
   app.get('/api/report/list/:source',
     function (req, res) {
-      db.sequelize.query('SELECT * FROM reports r where r.source=:source', { replacements: { source: req.params.source }, type: db.sequelize.QueryTypes.SELECT,hierarchy: true })
+      db.sequelize.query('SELECT * FROM reports r where r.source=:source', { replacements: { source: req.params.source }, type: db.sequelize.QueryTypes.SELECT })
         .then(function (rows) {
           res.json(rows);
         });
     });
 
- 
+
 
 
   // Retrieve all ilogdiaries
-  app.get('/api/report/:reportId',
+  app.get('/api/table/report/:reportId',
     function (req, res) {
-     db.sequelize.query(' select dbquery FROM hack.reports  where id= ' + req.params.reportId,
+      db.sequelize.query(' select dbquery FROM hack.reports  where id= ' + req.params.reportId,
         { type: db.sequelize.QueryTypes.SELECT }).then(function (rows) {
           console.log(rows[0].dbquery);
           getReportData(res, rows[0].dbquery);
@@ -74,21 +74,42 @@ module.exports = function (app) {
     db.sequelize.query(' select * FROM hack.' + dbquery,
       { type: db.sequelize.QueryTypes.SELECT }).then(function (rows) {
         res.json(rows);
-
       });
-
   }
 
   // CALL a Procedure MYSQL
- 
-  app.get('/api/proc/report',
+  app.get('/api/proc/report/:reportId/:params',
     function (req, res) {
-      db.sequelize.query(' call proc_eu_sex_time_hour(\'Romania\', \'Eating\');' )
-        .then(function (rows) {
-          res.json(rows);
+      db.sequelize.query(' select dbquery FROM hack.reports  where id= ' + req.params.reportId,
+        { type: db.sequelize.QueryTypes.SELECT }).then(function (rows) {
+          console.log(rows[0].dbquery);
+          getReportDataProcedure(res, rows[0].dbquery, req.params.params);
         });
     });
-   
+  function getReportDataProcedure(res, dbquery, params) {
+    var param_name = '';
+    var param_value = '';
+    var params_array = params.split("&");
+    for (i = 0; i < params_array.length; i++) {
+      var items_array = params_array[i].split("=");
+      param_name += ':' + items_array[0] + ',';
+      param_value += '\'' + items_array[1] + '\',';
+    }
+
+    if (param_name.length > 0) param_name = param_name.substring(0, param_name.length - 1);
+    if (param_value.length > 0) param_value = param_value.substring(0, param_value.length - 1);
+
+    let query = 'call ' + dbquery + '(' + param_value + ')';
+    console.log(query);
+    console.log(param_value);
+
+
+    db.sequelize.query(query, {type: db.sequelize.QueryTypes.RAW }
+    ).then(function (rows) {
+      res.json(rows);
+    });
+  }
+
 
   // Retrieve all eu_activities
   app.get('/api/report/eumainactivityrate/:country/:sex/:activity',
@@ -106,12 +127,12 @@ module.exports = function (app) {
       });
     });
 
-      // Retrieve all cls values
+  // Retrieve all cls values
   app.get('/api/cls/values/:cls',
-  function (req, res) {
-    db.sequelize.query('SELECT description FROM hack.'+ req.params.cls, { type: db.sequelize.QueryTypes.SELECT })
-      .then(function (rows) {
-        res.json(rows);
-      });
-  });
+    function (req, res) {
+      db.sequelize.query('SELECT description FROM hack.' + req.params.cls, { type: db.sequelize.QueryTypes.SELECT })
+        .then(function (rows) {
+          res.json(rows);
+        });
+    });
 }
