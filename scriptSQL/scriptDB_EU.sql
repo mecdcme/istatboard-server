@@ -285,3 +285,36 @@ END//
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 COMMENT='Pivots'
  
+ 
+ 
+ create or replace view `hack`.`mart_views_eu_activity_time_hour` as
+SELECT 
+activity,
+    EXTRACT(hour FROM SUBSTRING(start_time, 5, 6))  as hour,
+    sex,country,
+     avg(value) as value_avg
+      from hack.mart_eu_main_activity_rate
+   
+ group by activity,  hour,  sex,country
+ 
+ select *from  hack.mart_eu_main_activity_rate
+ 
+ 
+ 
+ 
+ delimiter //
+CREATE procedure `hack`.`proc_eu_sex_time_hour`(IN in_country VARCHAR(100), IN in_activity VARCHAR(100))
+BEGIN
+  SELECT 
+	EXTRACT(hour FROM SUBSTRING(start_time, 5, 6))  as hour,
+    avg(case  when sex = 'Males' then  value end) as val_male,
+    avg(case  when sex = 'Females' then  value end) as val_female    
+from hack.eu_main_activity_rate 
+      where activity = in_activity and country = in_country
+      and start_time like 'From%'
+group by hour;
+END//
+
+ call proc_eu_sex_time_hour('Romania', 'Males');cls_eu_activitiescls_eu_activities
+ 
+ 

@@ -48,7 +48,10 @@ module.exports = function (app) {
         res.json(vUserWeekJoins);
       });
     });
-  // Retrieve all ilogdiaries
+
+
+
+  // Retrieve all report
   app.get('/api/report/list/:source',
     function (req, res) {
       db.sequelize.query('SELECT * FROM reports r where r.source=:source', { replacements: { source: req.params.source }, type: db.sequelize.QueryTypes.SELECT })
@@ -60,7 +63,7 @@ module.exports = function (app) {
 
 
 
-  // Retrieve all ilogdiaries
+  // Retrieve report by reportid
   app.get('/api/table/report/:reportId',
     function (req, res) {
       db.sequelize.query(' select dbquery FROM hack.reports  where id= ' + req.params.reportId,
@@ -135,4 +138,23 @@ module.exports = function (app) {
           res.json(rows);
         });
     });
-}
+
+
+// Retrieve all pivot
+app.get('/api/pivot/list/:source',
+function (req, res) {
+  db.sequelize.query('SELECT * FROM pivots p where p.source=:source', { replacements: { source: req.params.source }, type: db.sequelize.QueryTypes.SELECT })
+    .then(function (rows) {
+      res.json(rows);
+    });
+});
+//get pivot data by Id
+app.get('/api/pivot/:pivotid',
+function (req, res) {
+  db.sequelize.query(' select vtable FROM hack.pivots  where id=:pivotid',
+    { replacements: { pivotid: req.params.pivotid },type: db.sequelize.QueryTypes.SELECT }).then(function (rows) {
+      console.log(rows[0].dbquery);
+      getReportData(res, rows[0].vtable);
+    });
+});
+  }
