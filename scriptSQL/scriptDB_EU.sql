@@ -175,7 +175,7 @@ insert into `hack`.`eu_cls_time`(description) value ('From 20:10 to 20:19');
 insert into `hack`.`eu_cls_time`(description) value ('From 20:20 to 20:29');
 insert into `hack`.`eu_cls_time`(description) value ('Total (24 hours)');
 
-CREATE TABLE `hack`.`eu_main_activity_rate` (
+CREATE TABLE `hack`.`mart_eu_main_activity_rate` (
   `activity` VARCHAR(100) NULL,
   `start_time` VARCHAR(100) NULL,
   `unit` VARCHAR(100) NULL,
@@ -197,7 +197,7 @@ SELECT
          avg(case  when  activity = 'TV and video' then  value end)  as val_tv,
           avg(case  when  activity = 'Travel to/from work/study' then  value  end) as val_travel,
            avg(case  when  activity = 'Unspecified time use and travel' then  value end)  as val_unspec   
-      from hack.eu_main_activity_rate 
+      from hack.mart_eu_main_activity_rate 
       where sex = 'Males' and country = 'Romania'
  group by start_time;
  
@@ -212,7 +212,7 @@ SELECT
          avg(case  when  activity = 'TV and video' then  value end)  as val_tv,
           avg(case  when  activity = 'Travel to/from work/study' then  value  end) as val_travel,
            avg(case  when  activity = 'Unspecified time use and travel' then  value end)  as val_unspec   
-      from hack.eu_main_activity_rate
+      from hack.mart_eu_main_activity_rate
       where sex = 'Males' and country = 'Romania' 
       and start_time like 'From%'
  group by hour
@@ -230,7 +230,7 @@ BEGIN
          avg(case  when  activity = 'TV and video' then  value end)  as val_tv,
           avg(case  when  activity = 'Travel to/from work/study' then  value  end) as val_travel,
            avg(case  when  activity = 'Unspecified time use and travel' then  value end)  as val_unspec   
-      from hack.eu_main_activity_rate
+      from hack.mart_eu_main_activity_rate
       where sex = in_sex and country = in_country
       and start_time like 'From%'
  group by hour;
@@ -243,7 +243,7 @@ SELECT
 	start_time,
     avg(case  when sex = 'Males' then  value end) as val_male,
     avg(case  when sex = 'Females' then  value end) as val_female    
-from hack.eu_main_activity_rate 
+from hack.mart_eu_main_activity_rate 
       where activity = 'Eating' and country = 'Romania'
 group by start_time;
 
@@ -252,24 +252,36 @@ SELECT
 	EXTRACT(hour FROM SUBSTRING(start_time, 5, 6))  as hour,
     avg(case  when sex = 'Males' then  value end) as val_male,
     avg(case  when sex = 'Females' then  value end) as val_female    
-from hack.eu_main_activity_rate 
+from hack.mart_eu_main_activity_rate 
       where activity = 'Eating' and country = 'Romania'
       and start_time like 'From%'
 group by hour;
 
 DROP PROCEDURE IF EXISTS `hack`.`proc_eu_sex_time_hour`
 delimiter //
-CREATE procedure `hack`.`proc_eu_sex_time_hour`(IN in_country VARCHAR(100), IN in_activity VARCHAR(100))
+CREATE procedure `hack`.`proc_eu_sex_time_hour`(IN in_country int(11), IN in_activity int(11))
 BEGIN
   SELECT 
 	EXTRACT(hour FROM SUBSTRING(start_time, 5, 6))  as hour,
     avg(case  when sex = 'Males' then  value end) as val_male,
     avg(case  when sex = 'Females' then  value end) as val_female    
-from hack.eu_main_activity_rate 
-      where activity = in_activity and country = in_country
+from hack.mart_mart_eu_main_activity_rate  eu
+join cls_eu_activities act on eu.activity =act.description
+join cls_eu_countries cnt on eu.country =cnt.description
+      where act.id = in_activity and cnt.id = in_country
       and start_time like 'From%'
 group by hour;
 END//
 
--- call proc_eu_sex_time_hour('Romania', 'Eating'); 
+-- call proc_eu_sex_time_hour('Romania', 'Eating');
+  call proc_eu_sex_time_hour(23, 1);
+ 
+ CREATE TABLE `pivots` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `label` varchar(45) DEFAULT NULL,
+  `table` varchar(45) DEFAULT NULL,
+  `config` varchar(2000) DEFAULT NULL,
+  `source` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 COMMENT='Pivots'
  

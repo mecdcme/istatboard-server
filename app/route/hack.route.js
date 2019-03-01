@@ -130,7 +130,7 @@ module.exports = function (app) {
   // Retrieve all cls values
   app.get('/api/cls/values/:cls',
     function (req, res) {
-      db.sequelize.query('SELECT description FROM hack.' + req.params.cls, { type: db.sequelize.QueryTypes.SELECT })
+      db.sequelize.query('SELECT id, description FROM hack.' + req.params.cls, { type: db.sequelize.QueryTypes.SELECT })
         .then(function (rows) {
           res.json(rows);
         });
