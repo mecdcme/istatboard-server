@@ -153,7 +153,7 @@ app.get('/api/pivot/:pivotid',
 function (req, res) {
   db.sequelize.query(' select vtable FROM hack.pivots  where id=:pivotid',
     { replacements: { pivotid: req.params.pivotid },type: db.sequelize.QueryTypes.SELECT }).then(function (rows) {
-      console.log(rows[0].dbquery);
+      console.log(rows[0].vtable);
       getReportData(res, rows[0].vtable);
     });
 });
