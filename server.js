@@ -25,8 +25,8 @@ require('./app/route/hack.route.js')(app);
 // Create a Server
 var server = app.listen(8080, function () {
  
-  let host = server.address().address
+  //let host = server.address().address
   let port = server.address().port
 
-  console.log("App listening at http://%s:%s", host, port);
+  console.log("Server listening on port %s", port);
 })
