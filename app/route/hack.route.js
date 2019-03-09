@@ -198,4 +198,44 @@ app.post('/api/upload',upload.single('photo'), function (req, res) {
     }
 });
 
+
+
+
+  // Retrieve all report
+  app.get('/api/select/:table',
+    function (req, res) {
+      db.sequelize.query('SELECT distinct geohash FROM  hack.' + req.params.table, {  type: db.sequelize.QueryTypes.SELECT })
+        .then(function (rows) {
+  var arraya=[]
+
+          for (i = 0; i < rows.length; i++) {
+            var item='';
+            var geoitem={};
+            try {
+              item = rows[i].geohash ;
+              geoitem =  Geohash.decode( rows[i].geohash) ;
+
+              db.sequelize.query('INSERT INTO cls_geohash (geohash,lat,lon) VALUES(\''+item+'\','+geoitem.lat+','+geoitem.lon+')' ); 
+            }
+            catch(err) {
+              console.log( 'ERROR GEOHASH ITEM :'+item);
+            }
+
+             
+          var a={geohash:item,latlong:geoitem}
+      
+          arraya.push(a);
+          }
+       
+          res.json(  arraya );
+        });
+    });
+
+
+     
+ 
+    var Geohash = require('latlon-geohash');
+// => 'ecy697h3ggnm'
+ 
+ 
   }//end file
