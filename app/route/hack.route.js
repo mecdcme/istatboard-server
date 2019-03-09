@@ -8,9 +8,9 @@ module.exports = function (app) {
   const timereport = db.timereport;
   const euMainActivityRate = db.EuMainActivityRate;
 
-  
-const multer = require('multer');
-const path = require('path');
+
+  const multer = require('multer');
+  const path = require('path');
 
   // Retrieve all ilogdiaries
   app.get('/api/ilogdiary',
@@ -111,7 +111,7 @@ const path = require('path');
     console.log(param_value);
 
 
-    db.sequelize.query(query, {type: db.sequelize.QueryTypes.RAW }
+    db.sequelize.query(query, { type: db.sequelize.QueryTypes.RAW }
     ).then(function (rows) {
       res.json(rows);
     });
@@ -144,23 +144,23 @@ const path = require('path');
     });
 
 
-// Retrieve all pivot
-app.get('/api/pivot/list/:source',
-function (req, res) {
-  db.sequelize.query('SELECT * FROM pivots p where p.source=:source', { replacements: { source: req.params.source }, type: db.sequelize.QueryTypes.SELECT })
-    .then(function (rows) {
-      res.json(rows);
+  // Retrieve all pivot
+  app.get('/api/pivot/list/:source',
+    function (req, res) {
+      db.sequelize.query('SELECT * FROM pivots p where p.source=:source', { replacements: { source: req.params.source }, type: db.sequelize.QueryTypes.SELECT })
+        .then(function (rows) {
+          res.json(rows);
+        });
     });
-});
-//get pivot data by Id
-app.get('/api/pivot/:pivotid',
-function (req, res) {
-  db.sequelize.query(' select vtable FROM hack.pivots  where id=:pivotid',
-    { replacements: { pivotid: req.params.pivotid },type: db.sequelize.QueryTypes.SELECT }).then(function (rows) {
-      console.log(rows[0].vtable);
-      getReportData(res, rows[0].vtable);
+  //get pivot data by Id
+  app.get('/api/pivot/:pivotid',
+    function (req, res) {
+      db.sequelize.query(' select vtable FROM hack.pivots  where id=:pivotid',
+        { replacements: { pivotid: req.params.pivotid }, type: db.sequelize.QueryTypes.SELECT }).then(function (rows) {
+          console.log(rows[0].vtable);
+          getReportData(res, rows[0].vtable);
+        });
     });
-});
 
 
 
@@ -169,73 +169,118 @@ function (req, res) {
 
 
 
-const DIR = './uploads';
- 
-let storage = multer.diskStorage({
+  const DIR = './uploads';
+
+  let storage = multer.diskStorage({
     destination: (req, file, cb) => {
       cb(null, DIR);
     },
     filename: (req, file, cb) => {
-      cb(null, file.fieldname + '-' + Date.now() +  path.extname(file.originalname));
+      cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
     }
-});
-let upload = multer({storage: storage});
- 
+  });
+  let upload = multer({ storage: storage });
 
 
-app.post('/api/upload',upload.single('photo'), function (req, res) {
-  if (!req.file) {
+
+  app.post('/api/upload', upload.single('photo'), function (req, res) {
+    if (!req.file) {
       console.log("No file received");
       return res.send({
         success: false
       });
-  
+
     } else {
       console.log('file received');
       return res.send({
         success: true
       })
     }
-});
+  });
 
 
-
+  var Geohash = require('latlon-geohash');
 
   // Retrieve all report
   app.get('/api/select/:table',
     function (req, res) {
-      db.sequelize.query('SELECT distinct geohash FROM  hack.' + req.params.table, {  type: db.sequelize.QueryTypes.SELECT })
+      db.sequelize.query('SELECT distinct geohash FROM  hack.' + req.params.table, { type: db.sequelize.QueryTypes.SELECT })
         .then(function (rows) {
-  var arraya=[]
+          var arraya = []
 
           for (i = 0; i < rows.length; i++) {
-            var item='';
-            var geoitem={};
+            var item = '';
+            var geoitem = {};
             try {
-              item = rows[i].geohash ;
-              geoitem =  Geohash.decode( rows[i].geohash) ;
+              item = rows[i].geohash;
+              geoitem = Geohash.decode(rows[i].geohash);
 
-              db.sequelize.query('INSERT INTO cls_geohash (geohash,lat,lon) VALUES(\''+item+'\','+geoitem.lat+','+geoitem.lon+')' ); 
+              db.sequelize.query('INSERT INTO cls_geohash (geohash,lat,lon) VALUES(\'' + item + '\',' + geoitem.lat + ',' + geoitem.lon + ')');
             }
-            catch(err) {
-              console.log( 'ERROR GEOHASH ITEM :'+item);
+            catch (err) {
+              console.log('ERROR GEOHASH ITEM :' + item);
             }
 
-             
-          var a={geohash:item,latlong:geoitem}
-      
-          arraya.push(a);
+
+            var a = { geohash: item, latlong: geoitem }
+
+            arraya.push(a);
           }
-       
-          res.json(  arraya );
+
+          res.json(arraya);
         });
     });
 
 
-     
- 
-    var Geohash = require('latlon-geohash');
-// => 'ecy697h3ggnm'
- 
- 
-  }//end file
+  var csv = require('csv');
+  var fs = require('fs');
+
+  // read file
+  app.get('/api/readfile/:file',
+    function (req, res) {
+      var obj = csv();
+
+      obj.from.path('./hackaton/EUSurvey/' + req.params.file + '.csv').to.array(function (data) {
+        var stream = fs.createWriteStream('./hackaton/EUSurvey/' + req.params.file + '_sql.sql');
+        stream.once('open', function (fd) {
+
+          stream.write('SET UNIQUE_CHECKS=0 \n ');
+          stream.write('SET FOREIGN_KEY_CHEKS=0 \n ');
+
+          var count = 0;
+          //for (var index = 1; index < data.length; index++) {
+            for (var index = 1; index < 101; index++) {
+
+            var COUNTRY = data[index][4];
+            var SEX = data[index][42];
+            for (var indext = 1; indext <= 144; indext++) {
+              var TIME = indext;
+              var ACTIVITY = -1;
+              if (data[index][215 + indext] != '') ACTIVITY = data[index][215 + indext];
+
+              var transport = -1;
+              if (data[index][503 + indext] != '') transport = data[index][503 + indext];
+              //  console.log(COUNTRY + ' - ' + SEX + ' - ' + TIME + ' - ' + ACTIVITY + ' - ' + transport);
+              //console.log(COUNTRY + ' - ' + SEX + ' - ' + TIME + ' - ' + ACTIVITY + ' - ' + transport);
+              //   db.sequelize.query('INSERT INTO hack.hetus (country,sex,start_time,activity,transport) VALUES(\''+COUNTRY+'\','+SEX+','+TIME+','+ACTIVITY+','+ACTIVITY+')' ); 
+              stream.write('INSERT INTO hack.hetus (country,sex,start_time,activity,transport) VALUES(\'' + COUNTRY + '\',' + SEX + ',' + TIME + ',' + ACTIVITY + ',' + ACTIVITY + ');\n');
+
+              count++;
+            }
+            console.log('Count row - ' + count);
+          }
+          stream.write('SET UNIQUE_CHECKS=1 \n ');
+          stream.write('SET FOREIGN_KEY_CHEKS=1 \n ');
+          stream.end();
+          console.log('Count Total - ' + count);
+        });
+
+      });
+
+      res.json("rows");
+
+    });
+
+
+
+}//end file

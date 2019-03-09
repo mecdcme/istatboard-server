@@ -11,13 +11,17 @@ const sequelize = new Sequelize(env.database, env.username, env.password, {
 },
 
   pool: {
-    max: env.max,
+    max: env.pool.max,
     min: env.pool.min,
     acquire: env.pool.acquire,
-    idle: env.pool.idle
+    idle: env.pool.idle,
+    idleTimeoutMillis: 500,
+    evictionRunIntervalMillis: 50,
+    softIdleTimeoutMillis: 50
   }
 });
 
+ 
 const db = {};
 
 db.Sequelize = Sequelize;
