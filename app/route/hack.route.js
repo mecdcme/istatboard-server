@@ -244,33 +244,48 @@ module.exports = function (app) {
         var stream = fs.createWriteStream('./hackaton/EUSurvey/' + req.params.file + '_sql.sql');
         stream.once('open', function (fd) {
 
-          stream.write('SET UNIQUE_CHECKS=0 \n ');
-          stream.write('SET FOREIGN_KEY_CHEKS=0 \n ');
+       //   stream.write('SET UNIQUE_CHECKS=0 \n ');
+       //   stream.write('SET FOREIGN_KEY_CHEKS=0 \n ');
 
           var count = 0;
           //for (var index = 1; index < data.length; index++) {
-            for (var index = 1; index < 101; index++) {
+            for (var index = 1; index <21; index++) {
 
             var COUNTRY = data[index][4];
             var SEX = data[index][42];
             for (var indext = 1; indext <= 144; indext++) {
               var TIME = indext;
               var ACTIVITY = -1;
-              if (data[index][215 + indext] != '') ACTIVITY = data[index][215 + indext];
+              if (data[index][215 + indext] != '') {
+                ACTIVITY = data[index][215 + indext]*1;
+               if (0<=ACTIVITY && ACTIVITY<=9) ACTIVITY=0;
+               if (10<=ACTIVITY && ACTIVITY<=19) ACTIVITY=1;
+               if (20<=ACTIVITY && ACTIVITY<=29) ACTIVITY=2;
+               if (30<=ACTIVITY && ACTIVITY<=39) ACTIVITY=3;
+               if (40<=ACTIVITY && ACTIVITY<=49) ACTIVITY=4;
+               if (50<=ACTIVITY && ACTIVITY<=59) ACTIVITY=5;
+               if (60<=ACTIVITY && ACTIVITY<=69) ACTIVITY=6;
+               if (70<=ACTIVITY && ACTIVITY<=79) ACTIVITY=7;
+               if (80<=ACTIVITY && ACTIVITY<=89) ACTIVITY=8;
+               if (90<=ACTIVITY && ACTIVITY<=99) ACTIVITY=9;
+
+              }
 
               var transport = -1;
               if (data[index][503 + indext] != '') transport = data[index][503 + indext];
               //  console.log(COUNTRY + ' - ' + SEX + ' - ' + TIME + ' - ' + ACTIVITY + ' - ' + transport);
               //console.log(COUNTRY + ' - ' + SEX + ' - ' + TIME + ' - ' + ACTIVITY + ' - ' + transport);
-              //   db.sequelize.query('INSERT INTO hack.hetus (country,sex,start_time,activity,transport) VALUES(\''+COUNTRY+'\','+SEX+','+TIME+','+ACTIVITY+','+ACTIVITY+')' ); 
-              stream.write('INSERT INTO hack.hetus (country,sex,start_time,activity,transport) VALUES(\'' + COUNTRY + '\',' + SEX + ',' + TIME + ',' + ACTIVITY + ',' + ACTIVITY + ');\n');
+             
+              //   db.sequelize.query('INSERT INTO hack.hetus (country,sex,start_time,activity,transport) VALUES(\''+COUNTRY+'\','+SEX+','+TIME+','+ACTIVITY+','+transport+')' ); 
+              
+              stream.write('INSERT INTO hack.hetus (country,sex,start_time,activity,transport) VALUES(\'' + COUNTRY + '\',' + SEX + ',' + TIME + ',' + ACTIVITY + ',' + transport + ');\n');
 
               count++;
             }
             console.log('Count row - ' + count);
           }
-          stream.write('SET UNIQUE_CHECKS=1 \n ');
-          stream.write('SET FOREIGN_KEY_CHEKS=1 \n ');
+         // stream.write('SET UNIQUE_CHECKS=1 \n ');
+          //stream.write('SET FOREIGN_KEY_CHEKS=1 \n ');
           stream.end();
           console.log('Count Total - ' + count);
         });

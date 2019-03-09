@@ -1,3 +1,10 @@
 node_modules/
 package-lock.json
 
+hackaton/EUSurvey/NO.csv
+hackaton/EUSurvey/FR.csv
+hackaton/EUSurvey/AT.csv
+hackaton/EUSurvey/BE_sql_ALL.sql
+hackaton/EUSurvey/AT_sql.sql
+hackaton/EUSurvey/BE.csv
+hackaton/EUSurvey/HU.csv
