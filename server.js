@@ -22,6 +22,7 @@ const corsOptions = {
 }
 
 app.use(cors(corsOptions));
+ 
 
 const db = require('./app/config/db.config.js');
   
