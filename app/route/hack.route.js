@@ -249,7 +249,7 @@ module.exports = function (app) {
 
           var count = 0;
           //for (var index = 1; index < data.length; index++) {
-            for (var index = 1; index <21; index++) {
+            for (var index = 1; index <101; index++) {
 
             var COUNTRY = data[index][4];
             var SEX = data[index][42];
@@ -258,17 +258,7 @@ module.exports = function (app) {
               var ACTIVITY = -1;
               if (data[index][215 + indext] != '') {
                 ACTIVITY = data[index][215 + indext]*1;
-               if (0<=ACTIVITY && ACTIVITY<=9) ACTIVITY=0;
-               if (10<=ACTIVITY && ACTIVITY<=19) ACTIVITY=1;
-               if (20<=ACTIVITY && ACTIVITY<=29) ACTIVITY=2;
-               if (30<=ACTIVITY && ACTIVITY<=39) ACTIVITY=3;
-               if (40<=ACTIVITY && ACTIVITY<=49) ACTIVITY=4;
-               if (50<=ACTIVITY && ACTIVITY<=59) ACTIVITY=5;
-               if (60<=ACTIVITY && ACTIVITY<=69) ACTIVITY=6;
-               if (70<=ACTIVITY && ACTIVITY<=79) ACTIVITY=7;
-               if (80<=ACTIVITY && ACTIVITY<=89) ACTIVITY=8;
-               if (90<=ACTIVITY && ACTIVITY<=99) ACTIVITY=9;
-
+               
               }
 
               var transport = -1;
